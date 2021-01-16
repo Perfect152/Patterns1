@@ -1,0 +1,64 @@
+#include <iostream>
+#include <string>
+using namespace std;
+ 
+class Artem 
+{
+	public:
+	string Operation1(int counter)
+	{
+		string result="went Samara";
+		string count=to_string(counter);
+		result+=count +"hours"+ '\n';
+		return result;
+	}
+};
+class Andrey 
+{
+	public:
+	string Operation1(int counter)
+	{
+		string result="bought cider";
+		string count=to_string(counter);
+		result+=count +"liters"+ '\n';
+		return result;
+	}
+};
+class Samara
+{
+	protected:
+	Artem*art;
+	Andrey*andr;
+	public:
+	Samara(Artem*art = nullptr,	Andrey*andr = nullptr)
+	{
+		this->art = new Artem;
+		this->andr = new Andrey;
+	}
+	~Samara()
+	{
+		delete art;
+		delete andr;
+	}
+	string Operation()
+	{
+		string result = "champion of samara";
+		result+='/n';
+		result+= this->art->Operation1(3);
+		result+= this->andr->Operation1(7);
+		return result;
+	}
+};
+void ClientCode(Samara*samara)
+{
+	cout<<samara->Operation();
+}
+int main()
+{
+	Artem*ar=new Artem;
+	Andrey*an=new Andrey;
+	Samara*samara= new Samara (ar,an);
+	ClientCode(samara);
+	delete samara;
+	return 0;
+}
