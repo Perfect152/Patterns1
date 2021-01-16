@@ -1,0 +1,96 @@
+#include <iostream>
+#include <string>
+ 
+using namespace std;
+ 
+class Box
+{
+public:
+    Box() {}
+    Box(const string& str) :name(str) {}
+    bool operator ==(const Box& z)
+    {
+        return this->name == z.name;
+    }
+private:
+    string name;
+};
+ 
+ 
+class Stack
+{
+    Box boxs[10];
+    int v;
+public:
+    friend class StackIter;
+    Stack()
+    {
+        v = -1;
+    }
+    void push(const Box& n)
+    {
+        boxs[++v] = n;
+    }
+    Box top() {
+        return boxs[v-1];
+    }
+    Box& pop()
+    {
+        return boxs[v];
+    }
+    bool isEmpty()
+    {
+        return (v == -1);
+    }
+};
+ 
+class StackIter
+{
+    const Stack& c;
+    int index;
+public:
+    StackIter(const Stack& s) : c(s)
+    {
+        index = 0;
+    }
+    void operator++()
+    {
+        index++;
+    }
+ 
+    bool operator()()
+    {
+        return index != c.v + 1;
+    }
+    Box operator *()
+    {
+        return c.boxs[index];
+    }
+};
+ 
+bool operator == (const Stack& j, const Stack& k)
+{
+    StackIter sij(j), sik(k);
+    for (; sij(); ++sij, ++sik)
+        if (!(*sij == *sik))
+            break;
+    return !sij() && !sik();
+}
+ 
+int main()
+{
+    setlocale(LC_ALL, "Rus");
+    Stack s1;
+    int i;
+    for (i = 1; i < 5; i++)
+        s1.push(Box("Boxs" + i));
+    Stack s2(s1), s3(s1), s4(s1), s5(s1);
+    s2.pop();
+    s5.pop();
+    s4.push(Box("Boxs" + 4));
+    s5.push(Box("Boxs" + 8));
+    cout << "s1 == s2? " << (s1 == s2) << endl;
+    cout << "s1 == s3? " << (s1 == s3) << endl;
+    cout << "s1 == s4? " << (s1 == s4) << endl;
+    cout << "s1 == s5? " << (s1 == s5) << endl;
+}
