@@ -1,0 +1,103 @@
+#include <iostream>
+ 
+using namespace std;
+ 
+ 
+ 
+class ToysCreate 
+{
+public:
+	virtual void Create(int width, int height, int mass) = 0;
+};
+ 
+class Car : public ToysCreate  
+{
+public:
+	const double MassMultiplier = 1;
+ 
+	void Create(int width, int height, int radius) override
+	{
+		cout << "Car toy " << width << " centimeters, " << height << " centimeters, mass = " << radius * MassMultiplier << endl;
+	}
+};
+ 
+class Avtomat : public ToysCreate
+{
+public:
+	const double MassMultiplier = 1.25;
+ 
+	void Create(int width, int height, int radius) override
+	{
+		cout << "Toy Avtomat " << width << " centimeters, " << height << " centimeters, mass = " << radius * MassMultiplier << endl;
+	}
+};
+ 
+class Toy 
+{
+protected:
+	ToysCreate* creator;
+ 
+public:
+	Toy(ToysCreate* crt)
+	{
+		creator = crt;
+	}
+ 
+	Toy() {}
+ 
+	virtual void crea() = 0;
+ 
+	virtual void enlargeRadius(int multiplier) = 0;
+};
+ 
+class Toys : public Toy 
+{
+	int width, height, mass;
+ 
+public:
+	Toys(int _width, int _height, int _mass, ToysCreate* toy)
+	{
+		creator = toy;
+		setWidth(_width);
+		setHeight(_height);
+		setMass(_mass);
+	}
+ 
+	void crea() override
+	{
+		creator->Create(width, height, mass);
+	}
+ 
+	void enlargeRadius(int multiplier) override
+	{
+		mass *= multiplier;
+	}
+ 
+	void setWidth(int _width)
+	{
+		width = _width;
+	}
+ 
+	void setHeight(int _height)
+	{
+		height = _height;
+	}
+ 
+	void setMass(int _mass)
+	{
+		mass = _mass;
+	}
+};
+ 
+ 
+ 
+int main(int argc, char* argv[])
+{
+	Toy* toys[2] = { new Toys(20,10,3, new Car()), new Toys(100,4,5, new Avtomat()) }; 
+ 
+	for (int i = 0; i < 2; i++)
+		toys[i]->crea(); 
+ 
+ 
+	return 0;
+}
